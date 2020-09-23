@@ -9,9 +9,9 @@ def write_sources_file():
     """Write a sources.yaml file to current working dir."""
     file_content = (
         "schemes: "
-        "https://github.com/chriskempson/base16-schemes-source.git\n"
+        "https://github.com/shebang/base16-schemes-source.git\n"
         "templates: "
-        "https://github.com/chriskempson/base16-templates-source.git"
+        "https://github.com/shebang/base16-templates-source.git"
     )
     file_path = rel_to_cwd("sources.yaml")
     with open(file_path, "w") as file_:

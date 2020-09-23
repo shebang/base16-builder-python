@@ -143,10 +143,11 @@ async def build_single(scheme_file, job_options):
             except FileExistsError:
                 pass
 
+            file_prefix = job_options.file_prefix if len(job_options.file_prefix) > 0 else 'base16'
             if sub["extension"] is not None:
-                filename = "base16-{}{}".format(scheme_slug, sub["extension"])
+                filename = "{}-{}{}".format(file_prefix, scheme_slug, sub["extension"])
             else:
-                filename = "base16-{}".format(scheme_slug)
+                filename = "{}-{}".format(file_prefix, scheme_slug)
 
             build_path = os.path.join(output_dir, filename)
 
@@ -182,7 +183,7 @@ async def build_scheduler(scheme_files, job_options):
     return await asyncio.gather(*task_list)
 
 
-def build(templates=None, schemes=None, base_output_dir=None, verbose=False, max_colors=16):
+def build(templates=None, schemes=None, base_output_dir=None, verbose=False, max_colors=16, file_prefix='base16'):
     """Main build function to initiate building process."""
     template_dirs = templates or get_template_dirs()
     scheme_files = get_scheme_files(schemes)
@@ -205,7 +206,7 @@ def build(templates=None, schemes=None, base_output_dir=None, verbose=False, max
     templates = [TemplateGroup(path) for path in template_dirs]
 
     job_options = JobOptions(
-        base_output_dir=base_output_dir, templates=templates, verbose=verbose, max_colors=max_colors
+        base_output_dir=base_output_dir, templates=templates, verbose=verbose, max_colors=max_colors, file_prefix=file_prefix
     )
 
     with compat_event_loop() as event_loop:

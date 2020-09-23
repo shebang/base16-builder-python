@@ -28,7 +28,8 @@ def build_mode(arg_namespace):
             schemes=arg_namespace.scheme,
             base_output_dir=arg_namespace.output,
             verbose=arg_namespace.verbose,
-            max_colors=arg_namespace.max_colors
+            max_colors=arg_namespace.max_colors,
+            file_prefix=arg_namespace.file_prefix
         )
         # return with exit code 2 if there were any non-fatal incidents during
         sys.exit(0 if result else 2)
@@ -144,9 +145,20 @@ build_parser.add_argument(
 build_parser.add_argument(
     "-m",
     "--max-colors",
-    action="append",
+    type=int,
+    action="store",
     metavar="MAX_COLORS",
     help="allows overriding the number of colors to process (default base16: 16)",
+)
+
+build_parser.add_argument(
+    "-p",
+    "--file-prefix",
+    type=str,
+    default='base16',
+    action="store",
+    metavar="FILE_PREFIX",
+    help="allows overriding the file prefix 'base16'",
 )
 
 build_parser.add_argument(
