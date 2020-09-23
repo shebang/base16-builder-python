@@ -28,6 +28,7 @@ def build_mode(arg_namespace):
             schemes=arg_namespace.scheme,
             base_output_dir=arg_namespace.output,
             verbose=arg_namespace.verbose,
+            max_colors=arg_namespace.max_colors
         )
         # return with exit code 2 if there were any non-fatal incidents during
         sys.exit(0 if result else 2)
@@ -140,6 +141,14 @@ build_parser.add_argument(
     metavar="TEMP",
     help="restrict operation to specific templates (must correspond to a directory in ./templates); can be specified more than once",
 )
+build_parser.add_argument(
+    "-m",
+    "--max-colors",
+    action="append",
+    metavar="MAX_COLORS",
+    help="allows overriding the number of colors to process (default base16: 16)",
+)
+
 build_parser.add_argument(
     "-s",
     "--scheme",

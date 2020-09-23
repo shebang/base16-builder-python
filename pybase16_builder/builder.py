@@ -84,12 +84,12 @@ def reverse_hex(hex_str):
     return hex_str
 
 
-def format_scheme(scheme, slug):
+def format_scheme(scheme, slug, max_colors=16):
     """Change $scheme so it can be applied to a template."""
     scheme["scheme-name"] = scheme.pop("scheme")
     scheme["scheme-author"] = scheme.pop("author")
     scheme["scheme-slug"] = slug
-    bases = ["base{:02X}".format(x) for x in range(0, 16)]
+    bases = ["base{:02X}".format(x) for x in range(0, max_colors)]
     for base in bases:
         scheme["{}-hex".format(base)] = scheme.pop(base)
         scheme["{}-hex-r".format(base)] = scheme["{}-hex".format(base)][0:2]
@@ -125,7 +125,7 @@ async def build_single(scheme_file, job_options):
     completed without warnings. Otherwise false."""
     scheme = get_yaml_dict(scheme_file)
     scheme_slug = slugify(scheme_file)
-    format_scheme(scheme, scheme_slug)
+    format_scheme(scheme, scheme_slug, job_options.max_colors)
     scheme_name = scheme["scheme-name"]
     warn = False  # set this for feedback to the caller
 
@@ -182,7 +182,7 @@ async def build_scheduler(scheme_files, job_options):
     return await asyncio.gather(*task_list)
 
 
-def build(templates=None, schemes=None, base_output_dir=None, verbose=False):
+def build(templates=None, schemes=None, base_output_dir=None, verbose=False, max_colors=16):
     """Main build function to initiate building process."""
     template_dirs = templates or get_template_dirs()
     scheme_files = get_scheme_files(schemes)
@@ -205,7 +205,7 @@ def build(templates=None, schemes=None, base_output_dir=None, verbose=False):
     templates = [TemplateGroup(path) for path in template_dirs]
 
     job_options = JobOptions(
-        base_output_dir=base_output_dir, templates=templates, verbose=verbose
+        base_output_dir=base_output_dir, templates=templates, verbose=verbose, max_colors=max_colors
     )
 
     with compat_event_loop() as event_loop:
