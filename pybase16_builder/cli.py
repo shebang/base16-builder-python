@@ -146,6 +146,7 @@ build_parser.add_argument(
     "-m",
     "--max-colors",
     type=int,
+    default=16,
     action="store",
     metavar="MAX_COLORS",
     help="allows overriding the number of colors to process (default base16: 16)",
